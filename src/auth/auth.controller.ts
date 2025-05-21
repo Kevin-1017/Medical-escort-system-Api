@@ -1,7 +1,7 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service'; // 导入服务
 import { auth_RegisterDto, auth_LoginDto } from './dto/auth.dto'; // 后续需要定义的 DTO
-import { User } from 'src/entities/user.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {

@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { User } from '../entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { auth_RegisterDto, auth_LoginDto } from './dto/auth.dto';
 
 @Injectable()
