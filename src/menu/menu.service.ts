@@ -1,26 +1,51 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMenuDto } from './dto/create-menu.dto';
-import { UpdateMenuDto } from './dto/update-menu.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Menu } from './entities/menu.entity';
+import { menu_CreateDto } from './dto/menu.dto';
+
+interface TreeMenu extends Omit<Menu, 'children'> {
+  children?: TreeMenu[];
+}
 
 @Injectable()
 export class MenuService {
-  create(createMenuDto: CreateMenuDto) {
-    return 'This action adds a new menu';
-  }
+  constructor(
+    @InjectRepository(Menu)
+    private readonly menuRepository: Repository<Menu>,
+  ) {}
 
-  findAll() {
-    return `This action returns all menu`;
-  }
+  async getMenus(): Promise<TreeMenu[]> {
+    const menus = await this.menuRepository.find();
 
-  findOne(id: number) {
-    return `This action returns a #${id} menu`;
-  }
+    // 构建树形结构
+    const map = new Map<number, TreeMenu>();
+    menus.forEach((menu) => map.set(menu.id, { ...menu }));
 
-  update(id: number, updateMenuDto: UpdateMenuDto) {
-    return `This action updates a #${id} menu`;
-  }
+    const tree: TreeMenu[] = [];
 
-  remove(id: number) {
-    return `This action removes a #${id} menu`;
+    menus.forEach((menu) => {
+      const item = map.get(menu.id);
+      if (item && item.parentId && map.has(item.parentId)) {
+        const parent = map.get(item.parentId);
+        if (parent) {
+          if (!parent.children) {
+            parent.children = [];
+          }
+          parent.children.push(item);
+        }
+      } else if (item && !item.parentId) {
+        tree.push(item);
+      }
+    });
+
+    return tree;
+  }
+  async createMenu(dto: menu_CreateDto): Promise<Menu> {
+    const menu = new Menu();
+    menu.label = dto.label;
+    menu.parentId = dto.parentId ?? null;
+    menu.disabled = dto.disabled ?? false;
+    return await this.menuRepository.save(menu);
   }
 }
