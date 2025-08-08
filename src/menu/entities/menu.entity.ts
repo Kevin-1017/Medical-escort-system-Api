@@ -1,34 +1,23 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  OneToMany,
-  JoinColumn,
-  ManyToMany,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
 import { Role } from '../../role/entities/role.entity';
+
 @Entity('menu')
 export class Menu {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  label: string;
+  @Column({ nullable: false })
+  name: string;
 
-  @Column({ default: false })
-  disabled: boolean;
+  @Column({ nullable: false })
+  path: string;
 
-  @Column({ type: 'int', nullable: true })
-  parentId: number | null;
+  @Column({ nullable: false })
+  icon: string;
 
-  @ManyToOne(() => Menu, (menu) => menu.children)
-  @JoinColumn({ name: 'parent_id' })
-  parent: Menu;
+  @Column({ nullable: true })
+  parent_id: number;
 
-  @OneToMany(() => Menu, (menu) => menu.parent)
-  children: Menu[];
-
-  @ManyToMany(() => Role, (role) => role.menus)
-  roles: Role[];
+  @ManyToMany(() => Role, (role) => role.menu)
+  role: Role[];
 }

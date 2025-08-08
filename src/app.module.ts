@@ -7,6 +7,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MenuModule } from './menu/menu.module';
 import { RoleModule } from './role/role.module';
 import { CompanionModule } from './companion/companion.module';
+import { OrderModule } from './order/order.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { CompanionModule } from './companion/companion.module';
     MenuModule,
     RoleModule,
     CompanionModule,
+    OrderModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

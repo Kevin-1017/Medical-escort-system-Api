@@ -4,6 +4,7 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  NotFoundException,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
 
@@ -11,7 +12,7 @@ interface ValidationError {
   message: string | string[] | Record<string, unknown>;
 }
 
-@Catch()
+@Catch() // 只能捕获在 NestJS 应用内部抛出的异常
 export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -32,6 +33,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       if (status === Number(HttpStatus.BAD_REQUEST)) {
         const errorResponse = exception.getResponse() as ValidationError;
         message = errorResponse.message || '请求无效,非dto字段验证错误';
+      }
+
+      // 处理 404 错误
+      if (exception instanceof NotFoundException) {
+        message = '请求的资源不存在';
       }
     }
 

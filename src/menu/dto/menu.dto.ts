@@ -2,13 +2,15 @@ import { IsString, IsOptional, IsBoolean, IsNumber } from 'class-validator';
 
 export class menu_CreateDto {
   @IsString()
-  label: string;
+  name: string;
 
-  @IsOptional()
-  @IsBoolean()
-  disabled?: boolean;
+  @IsString()
+  path: string;
 
-  @IsOptional()
+  @IsString()
+  icon: string;
+
+  @IsOptional() // 字段可选
   @IsNumber()
-  parentId?: number;
+  parent_id: number;
 }

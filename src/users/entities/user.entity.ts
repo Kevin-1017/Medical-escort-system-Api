@@ -9,6 +9,19 @@ export class User {
   @Column({ length: 11, nullable: false })
   phoneNumber: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   password: string;
+
+  @Column({ nullable: true, default: '默认昵称' })
+  name: string;
+
+  @Column({ nullable: true, default: 'user' })
+  role: string;
+
+  // 自动设置为当前时间戳
+  @Column({ nullable: true, default: () => 'CURRENT_TIMESTAMP' })
+  createDate: Date;
+
+  @Column({ nullable: true, default: true })
+  status: boolean;
 }

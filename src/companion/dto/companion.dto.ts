@@ -1,5 +1,12 @@
-// src/companion/dto/create-companion.dto.ts
-import { IsNumber, IsString, IsBoolean, Min, Length } from 'class-validator';
+import {
+  IsNumber,
+  IsString,
+  IsBoolean,
+  Min,
+  Length,
+  IsArray,
+  ArrayNotEmpty,
+} from 'class-validator';
 
 export class companion_CreateDto {
   @IsString()
@@ -21,4 +28,10 @@ export class companion_CreateDto {
 
   @IsString()
   sex: string; // '1' for male, '2' for female
+}
+export class companion_DeleteDto {
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsNumber({}, { each: true }) // 确保数组中的每个元素都是有效的数字
+  ids: number[];
 }

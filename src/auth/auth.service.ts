@@ -6,10 +6,14 @@ import {
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
 import { auth_RegisterDto, auth_LoginDto } from './dto/auth.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private jwtService: JwtService,
+  ) {}
   //用户注册
   async register(dto: auth_RegisterDto): Promise<User> {
     // 简化验证码验证逻辑（示例）
@@ -30,7 +34,10 @@ export class AuthService {
     return await this.usersService.create(user);
   }
   //用户登录
-  async login(dto: auth_LoginDto): Promise<User> {
+  async login(dto: auth_LoginDto): Promise<{
+    a_token: string;
+    userInfo: { id: number; phoneNumber: string; role: string };
+  }> {
     // 获取用户信息
     const user = await this.usersService.findOne(dto.phoneNumber);
     if (!user) {
@@ -39,7 +46,15 @@ export class AuthService {
       // 验证密码
       throw new UnauthorizedException('密码错误');
     } else {
-      return user;
+      const payload = {
+        phoneNumber: user.phoneNumber,
+        id: user.id,
+        role: user.role,
+      };
+      return {
+        a_token: await this.jwtService.signAsync(payload),
+        userInfo: payload,
+      };
     }
   }
 }

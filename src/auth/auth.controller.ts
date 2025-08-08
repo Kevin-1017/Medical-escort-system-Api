@@ -13,7 +13,10 @@ export class AuthController {
   }
 
   @Post('login')
-  login(@Body() dto: auth_LoginDto): Promise<User> {
+  login(@Body() dto: auth_LoginDto): Promise<{
+    a_token: string;
+    userInfo: { id: number; phoneNumber: string };
+  }> {
     return this.authService.login(dto);
   }
 }

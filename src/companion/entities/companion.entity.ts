@@ -1,7 +1,6 @@
-// src/companion/companion.entity.ts
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('companion')
 export class Companion {
   @PrimaryGeneratedColumn()
   id: number;
