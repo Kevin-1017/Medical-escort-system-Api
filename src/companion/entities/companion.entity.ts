@@ -7,19 +7,25 @@ export class Companion {
 
   @Column({ type: 'varchar', length: 11 })
   mobile: string;
+
   // 是否生效
   @Column()
   active: boolean;
 
   @Column('int')
   age: number;
+
   // 头像
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', default: '' })
   avatar: string;
 
   @Column({ type: 'varchar' })
   name: string;
-  // 1是男，2是女
+
   @Column({ type: 'varchar' })
   sex: string;
+
+  // 自动设置为当前时间戳
+  @Column({ nullable: true, default: () => 'CURRENT_TIMESTAMP' })
+  createDate: Date;
 }

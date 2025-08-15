@@ -15,7 +15,7 @@ export class User {
   @Column({ nullable: true, default: '默认昵称' })
   name: string;
 
-  @Column({ nullable: true, default: 'user' })
+  @Column({ nullable: true, default: '权限管理员' })
   role: string;
 
   // 自动设置为当前时间戳

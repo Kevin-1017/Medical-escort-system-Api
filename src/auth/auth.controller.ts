@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Headers } from '@nestjs/common';
 import { AuthService } from './auth.service'; // 导入服务
 import { auth_RegisterDto, auth_LoginDto } from './dto/auth.dto'; // 后续需要定义的 DTO
 import { User } from 'src/users/entities/user.entity';
@@ -13,10 +13,14 @@ export class AuthController {
   }
 
   @Post('login')
-  login(@Body() dto: auth_LoginDto): Promise<{
-    a_token: string;
+  login(
+    @Body() dto: auth_LoginDto,
+    @Headers('x-frontend-type') clientType: string, // 直接获取特定请求头
+  ): Promise<{
+    c_token?: string;
+    a_token?: string;
     userInfo: { id: number; phoneNumber: string };
   }> {
-    return this.authService.login(dto);
+    return this.authService.login(dto, clientType);
   }
 }

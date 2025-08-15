@@ -30,9 +30,10 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    // 从请求头中提取 a_token
-    const token = request.headers['a_token'] as string;
-    return token;
+  private extractTokenFromHeader(request: Request): string {
+    // 从请求头中提取 对应平台的token
+    const token =
+      request.headers['a_token'] || request.headers['c_token'] || '';
+    return token as string;
   }
 }

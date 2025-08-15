@@ -1,20 +1,15 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('order')
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', name: 'hospital_id' })
-  hospitalId: string;
+  @Column()
+  hospital_id: number;
 
   @Column({ type: 'varchar', name: 'hospital_name' })
-  hospitalName: string;
+  hospital_name: string;
 
   @Column({ type: 'varchar', name: 'receive_address' })
   receiveAddress: string;
@@ -22,18 +17,21 @@ export class Order {
   @Column({ type: 'varchar' })
   tel: string;
 
-  @Column({ type: 'bigint' })
-  starttime: number;
+  @Column()
+  start_time: string;
 
   @Column({ type: 'text' })
   demand: string;
 
   @Column({ type: 'integer', name: 'companion_id' })
-  companionId: number;
+  companion_id: number;
+
+  @Column({ type: 'varchar' })
+  companion_name: string;
 
   @Column({ type: 'varchar', default: 'pending' })
-  status: string;
+  order_status: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @Column({ nullable: true, default: () => 'CURRENT_TIMESTAMP' })
+  createDate: Date;
 }

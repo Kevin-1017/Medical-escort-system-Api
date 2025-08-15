@@ -13,6 +13,11 @@ export class PaginationDto {
   @Type(() => Number)
   @IsNumber()
   pageSize?: number;
+
+  @Type(() => Number)
+  @IsNumber()
+  @IsOptional()
+  id?: number;
 }
 
 // 分页响应结构

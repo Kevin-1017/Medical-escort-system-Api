@@ -34,14 +34,18 @@ export class AuthService {
     return await this.usersService.create(user);
   }
   //用户登录
-  async login(dto: auth_LoginDto): Promise<{
-    a_token: string;
-    userInfo: { id: number; phoneNumber: string; role: string };
+  async login(
+    dto: auth_LoginDto,
+    clientType: string,
+  ): Promise<{
+    c_token?: string;
+    a_token?: string;
+    userInfo: { id: number; phoneNumber: string; role: string; name: string };
   }> {
     // 获取用户信息
     const user = await this.usersService.findOne(dto.phoneNumber);
     if (!user) {
-      throw new NotFoundException('用户不存在');
+      throw new UnauthorizedException('用户不存在');
     } else if (user.password !== dto.password) {
       // 验证密码
       throw new UnauthorizedException('密码错误');
@@ -50,11 +54,20 @@ export class AuthService {
         phoneNumber: user.phoneNumber,
         id: user.id,
         role: user.role,
+        name: user.name,
       };
-      return {
-        a_token: await this.jwtService.signAsync(payload),
-        userInfo: payload,
+      const typeMap = {
+        h5: {
+          c_token: this.jwtService.sign(payload),
+          userInfo: payload,
+        },
+        default: {
+          a_token: this.jwtService.sign(payload),
+          userInfo: payload,
+        },
       };
+
+      return typeMap[clientType ?? 'default'];
     }
   }
 }

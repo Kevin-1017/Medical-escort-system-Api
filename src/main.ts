@@ -5,6 +5,7 @@ import { GlobalExceptionFilter } from './global/filters/global.filters';
 import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new GlobalExceptionFilter());
   app.useGlobalPipes(
@@ -20,6 +21,6 @@ async function bootstrap() {
   //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   //   allowedHeaders: ['Content-Type', 'Authorization'], // 允许的请求头
   // });
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3000); // 无配置，默认3000
 }
 bootstrap();
